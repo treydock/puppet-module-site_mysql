@@ -1,0 +1,30 @@
+{
+  "name": "treydock-puppet-module-site_mysql",
+  "version": "0.0.1",
+  "author": "treydock",
+  "summary": "Site specific MySQL Puppet module",
+  "license": "Apache 2.0",
+  "source": "git://github.com/treydock/puppet-module-site_mysql.git",
+  "issues_url": "https://github.com/treydock/puppet-module-site_mysql/issues",
+  "project_page": "https://github.com/treydock/puppet-module-site_mysql",
+  "tags": [ "mysql", "redhat", "centos" ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [ "6", "7" ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [ "6", "7" ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [ "6", "7" ]
+    }
+  ],
+  "dependencies": [
+    { "name": "puppetlabs-stdlib", "version_requirement": ">= 3.2.0 <5.0.0" },
+    { "name": "puppetlabs-lvm", "version_requirement": ">= 0.4.0" },
+    { "name": "puppetlabs-mysql", "version_requirement": ">= 2.0.0" }
+  ]
+}
