@@ -34,6 +34,7 @@ class site_mysql::mounts {
       device  => $site_mysql::datadir_device_real,
       fstype  => $site_mysql::datadir_fstype,
       options => $site_mysql::datadir_mount_options,
+      before  => Class['mysql::server::install'],
     }->
     file { 'mysql-datadir':
       ensure  => 'directory',

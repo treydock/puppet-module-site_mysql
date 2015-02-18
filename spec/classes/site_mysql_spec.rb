@@ -57,7 +57,7 @@ describe 'site_mysql' do
         :device  => '/dev/vg_mysql/lv_mysql',
         :fstype  => 'xfs',
         :options => 'noatime,nodiratime,nobarrier,defaults',
-        :before  => 'File[mysql-datadir]',
+        :before  => ['Class[Mysql::Server::Install]', 'File[mysql-datadir]'],
       })
     end
 
