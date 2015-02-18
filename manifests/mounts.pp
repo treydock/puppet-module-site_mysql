@@ -22,6 +22,11 @@ class site_mysql::mounts {
   }
 
   if $site_mysql::manage_mounts {
+    exec { 'mysql-datadir':
+      path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+      command => "mkdir -p ${site_mysql::datadir_path}",
+      creates => $site_mysql::datadir_path,
+    }->
     mount { 'mysql-datadir':
       ensure  => 'mounted',
       name    => $site_mysql::datadir_path,
@@ -29,19 +34,21 @@ class site_mysql::mounts {
       device  => $site_mysql::datadir_device_real,
       fstype  => $site_mysql::datadir_fstype,
       options => $site_mysql::datadir_mount_options,
+    }->
+    file { 'mysql-datadir':
+      ensure  => 'directory',
+      path    => $site_mysql::datadir_path,
+      owner   => 'mysql',
+      group   => 'mysql',
       require => Class['mysql::server::install'],
       before  => Class['mysql::server::config'],
     }
 
-    file { 'mysql-tmpdir':
-      ensure  => 'directory',
-      path    => $site_mysql::tmpdir_path,
-      owner   => 'mysql',
-      group   => 'mysql',
-      require => Class['mysql::server::install'],
-      before  => Mount['mysql-tmpdir'],
-    }
-
+    exec { 'mysql-tmpdir':
+      path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+      command => "mkdir -p ${site_mysql::tmpdir_path}",
+      creates => $site_mysql::tmpdir_path,
+    }->
     mount { 'mysql-tmpdir':
       ensure  => 'mounted',
       name    => $site_mysql::tmpdir_path,
@@ -49,6 +56,13 @@ class site_mysql::mounts {
       device  => $site_mysql::tmpdir_device,
       fstype  => $site_mysql::tmpdir_fstype,
       options => $site_mysql::tmpdir_mount_options,
+    }->
+    file { 'mysql-tmpdir':
+      ensure  => 'directory',
+      path    => $site_mysql::tmpdir_path,
+      owner   => 'mysql',
+      group   => 'mysql',
+      require => Class['mysql::server::install'],
       before  => Class['mysql::server::config'],
     }
   }

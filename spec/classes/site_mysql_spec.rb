@@ -42,6 +42,14 @@ describe 'site_mysql' do
     end
 
     it do
+      should contain_exec('mysql-datadir').with({
+        :command  => 'mkdir -p /var/lib/mysql',
+        :creates  => '/var/lib/mysql',
+        :before   => 'Mount[mysql-datadir]',
+      })
+    end
+
+    it do
       should contain_mount('mysql-datadir').with({
         :ensure  => 'mounted',
         :name    => '/var/lib/mysql',
@@ -49,18 +57,25 @@ describe 'site_mysql' do
         :device  => '/dev/vg_mysql/lv_mysql',
         :fstype  => 'xfs',
         :options => 'noatime,nodiratime,nobarrier,defaults',
-        :require => 'Class[Mysql::Server::Install]',
-        :before  => 'Class[Mysql::Server::Config]',
+        :before  => 'File[mysql-datadir]',
       })
     end
 
     it do
-      should contain_file('mysql-tmpdir').with({
+      should contain_file('mysql-datadir').with({
         :ensure   => 'directory',
-        :path     => '/var/cache/mysql',
+        :path     => '/var/lib/mysql',
         :owner    => 'mysql',
         :group    => 'mysql',
         :require  => 'Class[Mysql::Server::Install]',
+        :before   => 'Class[Mysql::Server::Config]',
+      })
+    end
+
+    it do
+      should contain_exec('mysql-tmpdir').with({
+        :command  => 'mkdir -p /var/cache/mysql',
+        :creates  => '/var/cache/mysql',
         :before   => 'Mount[mysql-tmpdir]',
       })
     end
@@ -73,7 +88,18 @@ describe 'site_mysql' do
         :device  => 'tmpfs',
         :fstype  => 'tmpfs',
         :options => 'rw,uid=mysql,gid=mysql,size=512M,nr_inodes=10k,mode=0755',
-        :before  => 'Class[Mysql::Server::Config]',
+        :before  => 'File[mysql-tmpdir]',
+      })
+    end
+
+    it do
+      should contain_file('mysql-tmpdir').with({
+        :ensure   => 'directory',
+        :path     => '/var/cache/mysql',
+        :owner    => 'mysql',
+        :group    => 'mysql',
+        :require  => 'Class[Mysql::Server::Install]',
+        :before   => 'Class[Mysql::Server::Config]',
       })
     end
   end
