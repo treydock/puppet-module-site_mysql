@@ -56,11 +56,12 @@ describe 'site_mysql' do
 
     it do
       should contain_file('mysql-tmpdir').with({
-        :ensure => 'directory',
-        :path   => '/var/cache/mysql',
-        :owner  => 'mysql',
-        :group  => 'mysql',
-        :before => 'Mount[mysql-tmpdir]',
+        :ensure   => 'directory',
+        :path     => '/var/cache/mysql',
+        :owner    => 'mysql',
+        :group    => 'mysql',
+        :require  => 'Class[Mysql::Server::Install]',
+        :before   => 'Mount[mysql-tmpdir]',
       })
     end
 
@@ -72,7 +73,6 @@ describe 'site_mysql' do
         :device  => 'tmpfs',
         :fstype  => 'tmpfs',
         :options => 'rw,uid=mysql,gid=mysql,size=512M,nr_inodes=10k,mode=0755',
-        :require => 'Class[Mysql::Server::Install]',
         :before  => 'Class[Mysql::Server::Config]',
       })
     end

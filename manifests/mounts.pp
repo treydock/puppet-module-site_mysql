@@ -33,11 +33,12 @@ class site_mysql::mounts {
     }
 
     file { 'mysql-tmpdir':
-      ensure => 'directory',
-      path   => $site_mysql::tmpdir_path,
-      owner  => 'mysql',
-      group  => 'mysql',
-      before => Mount['mysql-tmpdir'],
+      ensure  => 'directory',
+      path    => $site_mysql::tmpdir_path,
+      owner   => 'mysql',
+      group   => 'mysql',
+      require => Class['mysql::server::install'],
+      before  => Mount['mysql-tmpdir'],
     }
 
     mount { 'mysql-tmpdir':
@@ -47,7 +48,6 @@ class site_mysql::mounts {
       device  => $site_mysql::tmpdir_device,
       fstype  => $site_mysql::tmpdir_fstype,
       options => $site_mysql::tmpdir_mount_options,
-      require => Class['mysql::server::install'],
       before  => Class['mysql::server::config'],
     }
   }
