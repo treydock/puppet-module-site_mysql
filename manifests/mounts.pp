@@ -8,14 +8,15 @@ class site_mysql::mounts {
   }
 
   if $site_mysql::manage_lvm {
-    if $site_mysql::datadir_pv and $site_mysql::datadir_size {
+    if $site_mysql::datadir_pv {
       lvm::volume { $site_mysql::datadir_lv_name:
-        ensure => 'present',
-        vg     => $site_mysql::datadir_vg_name,
-        pv     => $site_mysql::datadir_pv,
-        fstype => $site_mysql::datadir_fstype,
-        size   => $site_mysql::datadir_size,
-        before => Mount['mysql-datadir'],
+        ensure  => 'present',
+        vg      => $site_mysql::datadir_vg_name,
+        pv      => $site_mysql::datadir_pv,
+        fstype  => $site_mysql::datadir_fstype,
+        size    => $site_mysql::datadir_size,
+        extents => $site_mysql::datadir_extents,
+        before  => Mount['mysql-datadir'],
       }
     }
   }

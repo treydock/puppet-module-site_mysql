@@ -8,6 +8,7 @@ class site_mysql (
   $datadir_vg_name        = 'vg_mysql',
   $datadir_lv_name        = 'lv_mysql',
   $datadir_size           = undef,
+  $datadir_extents        = undef,
   $datadir_path           = '/var/lib/mysql',
   $datadir_device         = undef,
   $datadir_fstype         = 'xfs',
