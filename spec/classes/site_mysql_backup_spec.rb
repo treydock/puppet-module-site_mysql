@@ -37,6 +37,15 @@ describe 'site_mysql::backup' do
   end
 
   it do
+    should contain_exec('mysql-backupdir').with({
+      :path     => '/bin:/usr/bin:/sbin:/usr/sbin',
+      :command  => 'mkdir -p /opt/mysql_backups',
+      :creates  => '/opt/mysql_backups',
+      :before   => 'Mount[mysql-backupdir]',
+    })
+  end
+
+  it do
     should contain_mount('mysql-backupdir').with({
       :ensure  => 'mounted',
       :name    => '/opt/mysql_backups',
@@ -44,7 +53,7 @@ describe 'site_mysql::backup' do
       :device  => '/dev/vg_mysql_backup/lv_mysql_backup',
       :fstype  => 'xfs',
       :options => 'noatime,nodiratime,nobarrier,defaults',
-      :require => 'File[mysqlbackupdir]',
+      :before  => 'File[mysqlbackupdir]',
     })
   end
 

@@ -37,6 +37,11 @@ class site_mysql::backup (
   }
 
   if $manage_mounts {
+    exec { 'mysql-backupdir':
+      path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+      command => "mkdir -p ${backup_path_real}",
+      creates => $backup_path_real,
+    }->
     mount { 'mysql-backupdir':
       ensure  => 'mounted',
       name    => $backup_path_real,
@@ -44,7 +49,7 @@ class site_mysql::backup (
       device  => $backup_device_real,
       fstype  => $backup_fstype,
       options => $backup_mount_options,
-      require => File['mysqlbackupdir'],
+      before  => File['mysqlbackupdir'],
     }
   }
 
