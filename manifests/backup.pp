@@ -44,7 +44,7 @@ class site_mysql::backup (
       device  => $backup_device_real,
       fstype  => $backup_fstype,
       options => $backup_mount_options,
-      before  => File['mysqlbackupdir'],
+      require => File['mysqlbackupdir'],
     }
   }
 

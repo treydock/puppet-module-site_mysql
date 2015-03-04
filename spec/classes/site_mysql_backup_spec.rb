@@ -44,7 +44,7 @@ describe 'site_mysql::backup' do
       :device  => '/dev/vg_mysql_backup/lv_mysql_backup',
       :fstype  => 'xfs',
       :options => 'noatime,nodiratime,nobarrier,defaults',
-      :before  => 'File[mysqlbackupdir]',
+      :require => 'File[mysqlbackupdir]',
     })
   end
 
